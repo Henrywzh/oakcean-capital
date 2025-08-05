@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pymongo
+certifi
+akshare
+pandas
+dotenv
+python-dotenv
+yfinance
