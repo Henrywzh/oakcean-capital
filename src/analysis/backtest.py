@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from analysis.utils import load_close_price_via_api
+from analysis.utils import load_close_price_via_api, TRADE_PATH
 
 
 class MeanReversionBacktester:
@@ -81,7 +81,7 @@ class MeanReversionBacktester:
 # === RUN ===
 if __name__ == "__main__":
     backtester = MeanReversionBacktester(
-        trade_path="../output/mean_reversion_trades.csv",
+        trade_path=TRADE_PATH,
     )
     pnl = backtester.backtest()
     backtester.plot_results()
