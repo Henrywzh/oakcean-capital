@@ -2,6 +2,7 @@ import pandas as pd
 import akshare as ak
 from src.config.settings import get_collection
 
+
 def upload_all():
     collection = get_collection()
     stock_list = ak.stock_info_a_code_name()
@@ -28,7 +29,7 @@ def upload_all():
                     "amount": float(r["成交额"])
                 })
 
-            if len(bulk_records) >= 5000:
+            if len(bulk_records) >= 10_000:
                 collection.insert_many(bulk_records)
                 bulk_records.clear()
 
