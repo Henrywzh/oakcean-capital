@@ -44,10 +44,22 @@ def load_close_price_via_api(ticker: str, start: datetime = None, end: datetime 
 
 
 def load_all_close_price_via_api(tickers: list[str], start: datetime, end: datetime) -> pd.DataFrame:
-    close_data = {}
-    for ticker in tqdm(tickers, desc="📥 Loading close prices via API"):
-        series = load_close_price_via_api(ticker, start, end)
-        if not series.empty:
-            close_data[ticker] = series
+    params = {
+        "tickers": tickers,
+        "fields": ["date", "close"],
+        "start": start.strftime("%Y-%m-%d"),
+        "end": end.strftime("%Y-%m-%d"),
+    }
 
-    return pd.DataFrame(close_data)
+    response = requests.get(f"{API_URL}/historical_data_bulk", params=params)
+    response.raise_for_status()
+    data = response.json()
+
+    if not data:
+        return pd.DataFrame()
+
+    df = pd.DataFrame(data)
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.pivot(index="date", columns="ticker", values="close")
+    df = df.sort_index()
+    return df

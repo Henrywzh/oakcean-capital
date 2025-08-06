@@ -42,14 +42,18 @@ def save_correlation_heatmap(corr_matrix: pd.DataFrame, path: str):
 
 
 def run_correlation_model(corr_matrix_path: str = CORR_MATRIX_PATH):
-    # tickers = ["600000.SS", "600004.SS", "600009.SS", "600010.SS"]
     start_date = datetime(2010, 1, 1)
     end_date = datetime(2023, 12, 31)  # for training
 
     tickers = get_all_tickers_via_api()
     price_df = load_all_close_price_via_api(tickers, start_date, end_date)
 
-    corr_matrix = compute_correlation_matrix(price_df)
+    clean_df = price_df.dropna(axis=1, thresh=int(0.9 * len(price_df)))  # keep cols with ≥90% data
+
+    # Drop any rows that still have NaNs
+    clean_df = clean_df.dropna()
+
+    corr_matrix = compute_correlation_matrix(clean_df)
 
     corr_matrix.to_csv(corr_matrix_path)
     print("✅ Correlation matrix saved")
