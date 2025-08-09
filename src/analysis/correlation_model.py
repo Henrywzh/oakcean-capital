@@ -19,6 +19,7 @@ def compute_correlation_matrix(log_returns: pd.DataFrame) -> pd.DataFrame:
 
 def plot_correlation_graph(corr_matrix, threshold=0.9):
     G = nx.Graph()
+
     for i in range(len(corr_matrix.columns)):
         for j in range(i + 1, len(corr_matrix.columns)):
             corr = corr_matrix.iloc[i, j]

@@ -9,7 +9,7 @@ from src.config.settings import get_collection
 
 # Constants
 INSERT_BATCH_SIZE = 5000
-INSERT_WORKER_DELAY = 0.5  # seconds (not needed with blocking queue)
+INSERT_WORKER_DELAY = 0.5  # seconds
 MAX_WORKERS = 10
 
 # Shared queue for passing records between threads
@@ -96,7 +96,7 @@ def mongo_insert_worker():
             print(f"❌ Final insert failed: {e}")
 
 
-def update_all_parallel_with_batch_insert():
+def update_all_insert():
     tickers = collection.distinct("ticker")
     print(f"🚀 Starting threaded update for {len(tickers)} tickers...")
 
@@ -119,4 +119,4 @@ def update_all_parallel_with_batch_insert():
 
 
 if __name__ == "__main__":
-    update_all_parallel_with_batch_insert()
+    update_all_insert()
